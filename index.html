@@ -1,1 +1,255 @@
-<h1>National SPAR Map Test</h1>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>National SPAR and SPAI Map</title>
+
+  <link href="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.css"
+        rel="stylesheet">
+
+  <script src="https://unpkg.com/maplibre-gl@5.6.2/dist/maplibre-gl.js"></script>
+  <script src="https://unpkg.com/pmtiles@4.3.0/dist/pmtiles.js"></script>
+
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; }
+    #map { position: absolute; inset: 0; }
+
+    .controls {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      background: white;
+      padding: 14px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #0003;
+      max-width: 245px;
+    }
+
+    .controls h3 { margin: 0 0 10px; font-size: 15px; }
+    .controls label { display: block; margin: 8px 0; }
+    .legend { margin-top: 14px; font-size: 12px; }
+    .gradient {
+      height: 14px;
+      margin: 6px 0;
+      border: 1px solid #aaa;
+    }
+    .ticks { display: flex; justify-content: space-between; }
+  </style>
+</head>
+
+<body>
+<div id="map"></div>
+
+<div class="controls">
+  <h3>National Healthcare Accessibility</h3>
+
+  <label>
+    <input type="radio" name="metric" value="SPAR" checked>
+    SPAR
+  </label>
+
+  <label>
+    <input type="radio" name="metric" value="SPAI">
+    SPAI
+  </label>
+
+  <label>
+    <input type="checkbox" id="providers" checked>
+    Show provider locations
+  </label>
+
+  <div id="legend" class="legend"></div>
+</div>
+
+<script>
+  const protocol = new pmtiles.Protocol();
+  maplibregl.addProtocol("pmtiles", protocol.tile);
+
+  const tilesURL = new URL(
+    "national-tracts.pmtiles",
+    window.location.href
+  ).href;
+
+  const map = new maplibregl.Map({
+    container: "map",
+    center: [-96, 38],
+    zoom: 3.5,
+    minZoom: 2,
+    maxZoom: 14,
+    style: {
+      version: 8,
+      sources: {
+        osm: {
+          type: "raster",
+          tiles: [
+            "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          ],
+          tileSize: 256,
+          attribution: "© OpenStreetMap contributors"
+        },
+        tracts: {
+          type: "vector",
+          url: "pmtiles://" + tilesURL
+        },
+        providers: {
+          type: "geojson",
+          data: "providers.geojson"
+        }
+      },
+      layers: [
+        {
+          id: "basemap",
+          type: "raster",
+          source: "osm"
+        }
+      ]
+    }
+  });
+
+  const sparColors = [
+    "#440154", "#414487", "#2a788e",
+    "#22a884", "#7ad151", "#fde725"
+  ];
+
+  const spaiColors = [
+    "#000004", "#3b0f70", "#8c2981",
+    "#de4968", "#fe9f6d", "#fcfdbf"
+  ];
+
+  function sparPaint() {
+    return [
+      "interpolate", ["linear"],
+      ["min", ["max", ["to-number", ["get", "SPAR"], 0], 0], 5],
+      0, sparColors[0],
+      1, sparColors[1],
+      2, sparColors[2],
+      3, sparColors[3],
+      4, sparColors[4],
+      5, sparColors[5]
+    ];
+  }
+
+  function spaiPaint() {
+    return [
+      "interpolate", ["linear"],
+      ["max", ["to-number", ["get", "SPAI"], 0], 0],
+      0, spaiColors[0],
+      0.00001, spaiColors[1],
+      0.00002, spaiColors[2],
+      0.00003, spaiColors[3],
+      0.00004, spaiColors[4],
+      0.00005, spaiColors[5]
+    ];
+  }
+
+  function updateLegend(metric) {
+    const colors = metric === "SPAR" ? sparColors : spaiColors;
+
+    const labels = metric === "SPAR"
+      ? ["0", "1", "2", "3", "4", "5+"]
+      : ["0", "1", "2", "3", "4", "5+"];
+
+    document.getElementById("legend").innerHTML = `
+      <strong>${metric}</strong>
+      ${metric === "SPAI" ? "<div>SPAI (× 10⁻⁵)</div>" : ""}
+      <div class="gradient"
+           style="background:linear-gradient(to right,${colors.join(",")})">
+      </div>
+      <div class="ticks">
+        ${labels.map(x => `<span>${x}</span>`).join("")}
+      </div>
+    `;
+  }
+
+  map.on("load", () => {
+    map.addLayer({
+      id: "tract-fill",
+      type: "fill",
+      source: "tracts",
+      "source-layer": "tracts",
+      paint: {
+        "fill-color": sparPaint(),
+        "fill-opacity": 0.82
+      }
+    });
+
+    map.addLayer({
+      id: "tract-outline",
+      type: "line",
+      source: "tracts",
+      "source-layer": "tracts",
+      minzoom: 7,
+      paint: {
+        "line-color": "#555555",
+        "line-width": 0.3,
+        "line-opacity": 0.45
+      }
+    });
+
+    map.addLayer({
+      id: "provider-points",
+      type: "circle",
+      source: "providers",
+      paint: {
+        "circle-radius": 3.5,
+        "circle-color": "#1675df",
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 0.7
+      }
+    });
+
+    updateLegend("SPAR");
+
+    map.on("click", "tract-fill", e => {
+      const p = e.features[0].properties;
+
+      new maplibregl.Popup()
+        .setLngLat(e.lngLat)
+        .setHTML(`
+          <strong>Census Tract: ${p.FIPS ?? "Unknown"}</strong>
+          <div>SPAR: ${p.SPAR ?? "NA"}</div>
+          <div>SPAI: ${p.SPAI ?? "NA"}</div>
+          <div>Population: ${p.POPULATION ?? "NA"}</div>
+        `)
+        .addTo(map);
+    });
+
+    map.on("mouseenter", "tract-fill", () => {
+      map.getCanvas().style.cursor = "pointer";
+    });
+
+    map.on("mouseleave", "tract-fill", () => {
+      map.getCanvas().style.cursor = "";
+    });
+
+    document.querySelectorAll('input[name="metric"]')
+      .forEach(input => {
+        input.addEventListener("change", () => {
+          const metric = input.value;
+          map.setPaintProperty(
+            "tract-fill",
+            "fill-color",
+            metric === "SPAR" ? sparPaint() : spaiPaint()
+          );
+          updateLegend(metric);
+        });
+      });
+
+    document.getElementById("providers")
+      .addEventListener("change", e => {
+        map.setLayoutProperty(
+          "provider-points",
+          "visibility",
+          e.target.checked ? "visible" : "none"
+        );
+      });
+  });
+
+  map.addControl(new maplibregl.NavigationControl(), "top-right");
+</script>
+</body>
+</html>
+
