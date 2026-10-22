@@ -202,9 +202,38 @@
     });
 
     updateLegend("SPAR");
+// Show provider information when a blue dot is clicked
+map.on("click", "provider-points", e => {
+  const p = e.features[0].properties;
 
+  new maplibregl.Popup()
+    .setLngLat(e.lngLat)
+    .setHTML(`
+      <strong>Provider Location</strong>
+      <div>GEOID: ${p.GEOID ?? "NA"}</div>
+      <div>Weighted provider count: ${p.weighted_provider_count ?? "NA"}</div>
+    `)
+    .addTo(map);
+});
+
+// Change cursor when hovering over provider dots
+map.on("mouseenter", "provider-points", () => {
+  map.getCanvas().style.cursor = "pointer";
+});
+
+map.on("mouseleave", "provider-points", () => {
+  map.getCanvas().style.cursor = "";
+});
     map.on("click", "tract-fill", e => {
-      const p = e.features[0].properties;
+
+  // Do not show a tract popup if a provider dot was clicked
+  if (map.queryRenderedFeatures(e.point, {
+    layers: ["provider-points"]
+  }).length > 0) {
+    return;
+  }
+
+  const p = e.features[0].properties;
 
       new maplibregl.Popup()
         .setLngLat(e.lngLat)
