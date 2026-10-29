@@ -60,6 +60,20 @@
     <input type="checkbox" id="providers" checked>
     Show provider locations
   </label>
+  <label>
+  <input type="checkbox" id="cities" checked>
+  Show city names
+</label>
+
+<label>
+  <input type="checkbox" id="states" checked>
+  Show state borders
+</label>
+
+<label>
+  <input type="checkbox" id="tracts" checked>
+  Show census tract borders
+</label>
 
   <div id="legend" class="legend"></div>
 </div>
@@ -81,7 +95,64 @@
     maxZoom: 14,
     style: {
       version: 8,
+      glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
       sources: {
+        states: {
+  type: "geojson",
+  data: "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json"
+},
+        cities: {
+  type: "geojson",
+  data: {
+    type: "FeatureCollection",
+    features: [
+      { type: "Feature", properties: { name: "New York" },
+        geometry: { type: "Point", coordinates: [-74.006, 40.713] } },
+
+      { type: "Feature", properties: { name: "Los Angeles" },
+        geometry: { type: "Point", coordinates: [-118.244, 34.052] } },
+
+      { type: "Feature", properties: { name: "Chicago" },
+        geometry: { type: "Point", coordinates: [-87.630, 41.878] } },
+
+      { type: "Feature", properties: { name: "Houston" },
+        geometry: { type: "Point", coordinates: [-95.370, 29.760] } },
+
+      { type: "Feature", properties: { name: "Phoenix" },
+        geometry: { type: "Point", coordinates: [-112.074, 33.448] } },
+
+      { type: "Feature", properties: { name: "Philadelphia" },
+        geometry: { type: "Point", coordinates: [-75.165, 39.953] } },
+
+      { type: "Feature", properties: { name: "Pittsburgh" },
+        geometry: { type: "Point", coordinates: [-79.996, 40.441] } },
+
+      { type: "Feature", properties: { name: "Washington, DC" },
+        geometry: { type: "Point", coordinates: [-77.037, 38.907] } },
+
+      { type: "Feature", properties: { name: "Atlanta" },
+        geometry: { type: "Point", coordinates: [-84.388, 33.749] } },
+
+      { type: "Feature", properties: { name: "Miami" },
+        geometry: { type: "Point", coordinates: [-80.192, 25.762] } },
+
+      { type: "Feature", properties: { name: "Dallas" },
+        geometry: { type: "Point", coordinates: [-96.797, 32.777] } },
+
+      { type: "Feature", properties: { name: "Denver" },
+        geometry: { type: "Point", coordinates: [-104.990, 39.739] } },
+
+      { type: "Feature", properties: { name: "Seattle" },
+        geometry: { type: "Point", coordinates: [-122.332, 47.606] } },
+
+      { type: "Feature", properties: { name: "San Francisco" },
+        geometry: { type: "Point", coordinates: [-122.419, 37.775] } },
+
+      { type: "Feature", properties: { name: "Boston" },
+        geometry: { type: "Point", coordinates: [-71.059, 42.360] } }
+    ]
+  }
+},
         osm: {
           type: "raster",
           tiles: [
@@ -176,19 +247,67 @@
       }
     });
 
-    map.addLayer({
-      id: "tract-outline",
-      type: "line",
-      source: "tracts",
-      "source-layer": "tracts",
-      minzoom: 7,
-      paint: {
-        "line-color": "#555555",
-        "line-width": 0.3,
-        "line-opacity": 0.45
-      }
-    });
+   map.addLayer({
+  id: "tract-outline",
+  type: "line",
+  source: "tracts",
+  "source-layer": "tracts",
 
+  // Only show tract boundaries when zoomed in
+  minzoom: 7,
+
+  paint: {
+    "line-color": "#FFFFFF",
+    "line-width": 0.5,
+    "line-opacity": 0.7
+  }
+});
+    // White state borders
+map.addLayer({
+  id: "state-borders",
+  type: "line",
+  source: "states",
+  paint: {
+    "line-color": "#FFFFFF",
+    "line-width": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      3, 1.2,
+      6, 1.8,
+      10, 2.2
+    ],
+    "line-opacity": 0.95
+  }
+});
+    // White city names
+map.addLayer({
+  id: "city-labels",
+  type: "symbol",
+  source: "cities",
+
+  layout: {
+    "text-field": ["get", "name"],
+    "text-size": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      3, 10,
+      6, 13,
+      10, 15
+    ],
+    "text-font": ["Open Sans Regular", "Arial Unicode MS Regular"],
+    "text-anchor": "center",
+    "text-offset": [0, 0.8],
+    "text-allow-overlap": false
+  },
+
+  paint: {
+    "text-color": "#FFFFFF",
+    "text-halo-color": "#333333",
+    "text-halo-width": 1.5
+  }
+});
     map.addLayer({
       id: "provider-points",
       type: "circle",
@@ -275,6 +394,35 @@ map.on("mouseleave", "provider-points", () => {
           e.target.checked ? "visible" : "none"
         );
       });
+    // Toggle city names
+document.getElementById("cities")
+  .addEventListener("change", e => {
+    map.setLayoutProperty(
+      "city-labels",
+      "visibility",
+      e.target.checked ? "visible" : "none"
+    );
+  });
+
+// Toggle state borders
+document.getElementById("states")
+  .addEventListener("change", e => {
+    map.setLayoutProperty(
+      "state-borders",
+      "visibility",
+      e.target.checked ? "visible" : "none"
+    );
+  });
+
+// Toggle census tract borders
+document.getElementById("tracts")
+  .addEventListener("change", e => {
+    map.setLayoutProperty(
+      "tract-outline",
+      "visibility",
+      e.target.checked ? "visible" : "none"
+    );
+  });
   });
 
   map.addControl(new maplibregl.NavigationControl(), "top-right");
