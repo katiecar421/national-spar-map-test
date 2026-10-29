@@ -101,55 +101,201 @@
   type: "geojson",
   data: "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json"
 },
-        cities: {
+ cities: {
   type: "geojson",
   data: {
     type: "FeatureCollection",
     features: [
-      { type: "Feature", properties: { name: "New York" },
-        geometry: { type: "Point", coordinates: [-74.006, 40.713] } },
 
-      { type: "Feature", properties: { name: "Los Angeles" },
-        geometry: { type: "Point", coordinates: [-118.244, 34.052] } },
+      // ==========================================
+      // STATE CAPITALS (CONTIGUOUS UNITED STATES)
+      // ==========================================
 
-      { type: "Feature", properties: { name: "Chicago" },
-        geometry: { type: "Point", coordinates: [-87.630, 41.878] } },
-
-      { type: "Feature", properties: { name: "Houston" },
-        geometry: { type: "Point", coordinates: [-95.370, 29.760] } },
+      { type: "Feature", properties: { name: "Montgomery" },
+        geometry: { type: "Point", coordinates: [-86.3000, 32.3668] } },
 
       { type: "Feature", properties: { name: "Phoenix" },
-        geometry: { type: "Point", coordinates: [-112.074, 33.448] } },
+        geometry: { type: "Point", coordinates: [-112.0740, 33.4484] } },
 
-      { type: "Feature", properties: { name: "Philadelphia" },
-        geometry: { type: "Point", coordinates: [-75.165, 39.953] } },
+      { type: "Feature", properties: { name: "Little Rock" },
+        geometry: { type: "Point", coordinates: [-92.2896, 34.7465] } },
 
-      { type: "Feature", properties: { name: "Pittsburgh" },
-        geometry: { type: "Point", coordinates: [-79.996, 40.441] } },
-
-      { type: "Feature", properties: { name: "Washington, DC" },
-        geometry: { type: "Point", coordinates: [-77.037, 38.907] } },
-
-      { type: "Feature", properties: { name: "Atlanta" },
-        geometry: { type: "Point", coordinates: [-84.388, 33.749] } },
-
-      { type: "Feature", properties: { name: "Miami" },
-        geometry: { type: "Point", coordinates: [-80.192, 25.762] } },
-
-      { type: "Feature", properties: { name: "Dallas" },
-        geometry: { type: "Point", coordinates: [-96.797, 32.777] } },
+      { type: "Feature", properties: { name: "Sacramento" },
+        geometry: { type: "Point", coordinates: [-121.4944, 38.5816] } },
 
       { type: "Feature", properties: { name: "Denver" },
-        geometry: { type: "Point", coordinates: [-104.990, 39.739] } },
+        geometry: { type: "Point", coordinates: [-104.9903, 39.7392] } },
 
-      { type: "Feature", properties: { name: "Seattle" },
-        geometry: { type: "Point", coordinates: [-122.332, 47.606] } },
+      { type: "Feature", properties: { name: "Hartford" },
+        geometry: { type: "Point", coordinates: [-72.6851, 41.7637] } },
 
-      { type: "Feature", properties: { name: "San Francisco" },
-        geometry: { type: "Point", coordinates: [-122.419, 37.775] } },
+      { type: "Feature", properties: { name: "Dover" },
+        geometry: { type: "Point", coordinates: [-75.5244, 39.1582] } },
+
+      { type: "Feature", properties: { name: "Tallahassee" },
+        geometry: { type: "Point", coordinates: [-84.2807, 30.4383] } },
+
+      { type: "Feature", properties: { name: "Atlanta" },
+        geometry: { type: "Point", coordinates: [-84.3880, 33.7490] } },
+
+      { type: "Feature", properties: { name: "Boise" },
+        geometry: { type: "Point", coordinates: [-116.2023, 43.6150] } },
+
+      { type: "Feature", properties: { name: "Springfield" },
+        geometry: { type: "Point", coordinates: [-89.6501, 39.7817] } },
+
+      { type: "Feature", properties: { name: "Indianapolis" },
+        geometry: { type: "Point", coordinates: [-86.1581, 39.7684] } },
+
+      { type: "Feature", properties: { name: "Des Moines" },
+        geometry: { type: "Point", coordinates: [-93.6250, 41.5868] } },
+
+      { type: "Feature", properties: { name: "Topeka" },
+        geometry: { type: "Point", coordinates: [-95.6890, 39.0473] } },
+
+      { type: "Feature", properties: { name: "Frankfort" },
+        geometry: { type: "Point", coordinates: [-84.8733, 38.2009] } },
+
+      { type: "Feature", properties: { name: "Baton Rouge" },
+        geometry: { type: "Point", coordinates: [-91.1403, 30.4515] } },
+
+      { type: "Feature", properties: { name: "Augusta" },
+        geometry: { type: "Point", coordinates: [-69.7795, 44.3106] } },
+
+      { type: "Feature", properties: { name: "Annapolis" },
+        geometry: { type: "Point", coordinates: [-76.4922, 38.9784] } },
 
       { type: "Feature", properties: { name: "Boston" },
-        geometry: { type: "Point", coordinates: [-71.059, 42.360] } }
+        geometry: { type: "Point", coordinates: [-71.0589, 42.3601] } },
+
+      { type: "Feature", properties: { name: "Lansing" },
+        geometry: { type: "Point", coordinates: [-84.5555, 42.7325] } },
+
+      { type: "Feature", properties: { name: "Saint Paul" },
+        geometry: { type: "Point", coordinates: [-93.0900, 44.9537] } },
+
+      { type: "Feature", properties: { name: "Jackson" },
+        geometry: { type: "Point", coordinates: [-90.1848, 32.2988] } },
+
+      { type: "Feature", properties: { name: "Jefferson City" },
+        geometry: { type: "Point", coordinates: [-92.1735, 38.5767] } },
+
+      { type: "Feature", properties: { name: "Helena" },
+        geometry: { type: "Point", coordinates: [-112.0391, 46.5884] } },
+
+      { type: "Feature", properties: { name: "Lincoln" },
+        geometry: { type: "Point", coordinates: [-96.7026, 40.8136] } },
+
+      { type: "Feature", properties: { name: "Carson City" },
+        geometry: { type: "Point", coordinates: [-119.7674, 39.1638] } },
+
+      { type: "Feature", properties: { name: "Concord" },
+        geometry: { type: "Point", coordinates: [-71.5376, 43.2081] } },
+
+      { type: "Feature", properties: { name: "Trenton" },
+        geometry: { type: "Point", coordinates: [-74.7429, 40.2171] } },
+
+      { type: "Feature", properties: { name: "Santa Fe" },
+        geometry: { type: "Point", coordinates: [-105.9378, 35.6870] } },
+
+      { type: "Feature", properties: { name: "Albany" },
+        geometry: { type: "Point", coordinates: [-73.7562, 42.6526] } },
+
+      { type: "Feature", properties: { name: "Raleigh" },
+        geometry: { type: "Point", coordinates: [-78.6382, 35.7796] } },
+
+      { type: "Feature", properties: { name: "Bismarck" },
+        geometry: { type: "Point", coordinates: [-100.7837, 46.8083] } },
+
+      { type: "Feature", properties: { name: "Columbus" },
+        geometry: { type: "Point", coordinates: [-82.9988, 39.9612] } },
+
+      { type: "Feature", properties: { name: "Oklahoma City" },
+        geometry: { type: "Point", coordinates: [-97.5164, 35.4676] } },
+
+      { type: "Feature", properties: { name: "Salem" },
+        geometry: { type: "Point", coordinates: [-123.0351, 44.9429] } },
+
+      { type: "Feature", properties: { name: "Harrisburg" },
+        geometry: { type: "Point", coordinates: [-76.8844, 40.2732] } },
+
+      { type: "Feature", properties: { name: "Providence" },
+        geometry: { type: "Point", coordinates: [-71.4128, 41.8240] } },
+
+      { type: "Feature", properties: { name: "Columbia" },
+        geometry: { type: "Point", coordinates: [-81.0348, 34.0007] } },
+
+      { type: "Feature", properties: { name: "Pierre" },
+        geometry: { type: "Point", coordinates: [-100.3510, 44.3683] } },
+
+      { type: "Feature", properties: { name: "Nashville" },
+        geometry: { type: "Point", coordinates: [-86.7816, 36.1627] } },
+
+      { type: "Feature", properties: { name: "Austin" },
+        geometry: { type: "Point", coordinates: [-97.7431, 30.2672] } },
+
+      { type: "Feature", properties: { name: "Salt Lake City" },
+        geometry: { type: "Point", coordinates: [-111.8910, 40.7608] } },
+
+      { type: "Feature", properties: { name: "Montpelier" },
+        geometry: { type: "Point", coordinates: [-72.5754, 44.2601] } },
+
+      { type: "Feature", properties: { name: "Richmond" },
+        geometry: { type: "Point", coordinates: [-77.4360, 37.5407] } },
+
+      { type: "Feature", properties: { name: "Olympia" },
+        geometry: { type: "Point", coordinates: [-122.9007, 47.0379] } },
+
+      { type: "Feature", properties: { name: "Charleston" },
+        geometry: { type: "Point", coordinates: [-81.6326, 38.3498] } },
+
+      { type: "Feature", properties: { name: "Madison" },
+        geometry: { type: "Point", coordinates: [-89.4012, 43.0731] } },
+
+      { type: "Feature", properties: { name: "Cheyenne" },
+        geometry: { type: "Point", coordinates: [-104.8202, 41.1400] } },
+
+      // ==========================================
+      // WASHINGTON, DC
+      // ==========================================
+
+      { type: "Feature", properties: { name: "Washington, DC" },
+        geometry: { type: "Point", coordinates: [-77.0369, 38.9072] } },
+
+      // ==========================================
+      // ADDITIONAL MAJOR CITIES
+      // ==========================================
+
+      { type: "Feature", properties: { name: "New York" },
+        geometry: { type: "Point", coordinates: [-74.0060, 40.7128] } },
+
+      { type: "Feature", properties: { name: "Los Angeles" },
+        geometry: { type: "Point", coordinates: [-118.2437, 34.0522] } },
+
+      { type: "Feature", properties: { name: "Chicago" },
+        geometry: { type: "Point", coordinates: [-87.6298, 41.8781] } },
+
+      { type: "Feature", properties: { name: "Houston" },
+        geometry: { type: "Point", coordinates: [-95.3698, 29.7604] } },
+
+      { type: "Feature", properties: { name: "Philadelphia" },
+        geometry: { type: "Point", coordinates: [-75.1652, 39.9526] } },
+
+      { type: "Feature", properties: { name: "Pittsburgh" },
+        geometry: { type: "Point", coordinates: [-79.9959, 40.4406] } },
+
+      { type: "Feature", properties: { name: "Miami" },
+        geometry: { type: "Point", coordinates: [-80.1918, 25.7617] } },
+
+      { type: "Feature", properties: { name: "Dallas" },
+        geometry: { type: "Point", coordinates: [-96.7970, 32.7767] } },
+
+      { type: "Feature", properties: { name: "Seattle" },
+        geometry: { type: "Point", coordinates: [-122.3321, 47.6062] } },
+
+      { type: "Feature", properties: { name: "San Francisco" },
+        geometry: { type: "Point", coordinates: [-122.4194, 37.7749] } }
+
     ]
   }
 },
